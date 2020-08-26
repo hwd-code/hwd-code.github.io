@@ -176,7 +176,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-25 22:03:23" itemprop="dateModified" datetime="2020-08-25T22:03:23+08:00">2020-08-25</time>
+                <time title="修改时间：2020-08-26 01:28:37" itemprop="dateModified" datetime="2020-08-26T01:28:37+08:00">2020-08-26</time>
               </span>
 
           
@@ -190,14 +190,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="PHP介绍"><a href="#PHP介绍" class="headerlink" title="PHP介绍"></a>PHP介绍</h2><h2 id="PHP（全称：PHP：Hypertext-Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。"><a href="#PHP（全称：PHP：Hypertext-Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。" class="headerlink" title="PHP（全称：PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。"></a>PHP（全称：PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。</h2><h2 id="基本的PHP语法"><a href="#基本的PHP语法" class="headerlink" title="基本的PHP语法"></a>基本的PHP语法</h2><p>PHP 脚本可以放在文档中的任何位置;以 <?php 开始，以 ?> 结束;默认文件扩展名是 “.php”。</p>
-<p>//和#（单行注释）、/**/（多行注释）</p>
-<p>在浏览器输出文本的基础指令：echo（输出多个变量）和 print（单个变量）;</p>
-<p>变量由$与标识符（以字母或下划线开始、不能有空格且区分大小写）组成；不必向 PHP 声明该变量的数据类型，PHP 会根据变量的值，自动把变量转换为正确的数据类型。</p>
-<p>PHP 有四种不同的变量作用域：local、global、static、parameter。</p>
-<p>在所有函数外部定义的变量，拥有全局作用域。除了函数外，全局变量可以被脚本中的任何部分访问，要在一个函数中访问一个全局变量，需要使用 global 关键字。 </p>
-<p>在 PHP 函数内部声明的变量是局部变量，仅能在函数内部访问。如果需要访问全局变量的话就需要用到global关键字。</p>
-
+          <h2 id="PHP简介"><a href="#PHP简介" class="headerlink" title="PHP简介"></a>PHP简介</h2><h2 id="PHP（全称：PHP：Hypertext-Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言-在服务器上执行。"><a href="#PHP（全称：PHP：Hypertext-Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言-在服务器上执行。" class="headerlink" title="PHP（全称：PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言, 在服务器上执行。"></a>PHP（全称：PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言, 在服务器上执行。</h2><h2 id="PHP语法"><a href="#PHP语法" class="headerlink" title="PHP语法"></a>PHP语法</h2><p>PHP 脚本可以放在文档中的任何位置;以 <?php 开始，以 ?> 结束;默认文件扩展名是 “.php”。<br>//和#（单行注释）、/**/（多行注释）</p>
+<hr>
+<h2 id="PHP变量"><a href="#PHP变量" class="headerlink" title="PHP变量"></a>PHP变量</h2><p>变量是用于存储信息的”容器”，由$与标识符（以字母或下划线开始、不能有空格且区分大小写）组成；且不必向 PHP 声明该变量的数据类型，PHP 会根据变量的值，自动把变量转换为正确的数据类型。<br>PHP有四种不同的变量作用域：local、global、static、parameter。<br>在所有函数外部定义的变量，拥有全局作用域。除了函数外，全局变量可以被脚本中的任何部分访问，要在一个函数中访问一个全局变量，需要使用 global 关键字或$GLOBALS[],全局变量都储存在里面。<br>当一个函数完成时，它的所有变量通常都会被删除，而static关键字修饰后则不会被删除。<br>参数是通过调用代码将值传递给函数的局部变量。</p>
+<hr>
+<h2 id="echo和print语句"><a href="#echo和print语句" class="headerlink" title="echo和print语句"></a>echo和print语句</h2><p>区别：echo可以输出一个或多个字符串；print只允许一个字符串，返回值总为1。<br>两者都是语言结构，可以使用括号，也可以不用。</p>
+<hr>
+<h2 id="PHP-EOF-heredoc-使用说明"><a href="#PHP-EOF-heredoc-使用说明" class="headerlink" title="PHP EOF(heredoc)使用说明"></a>PHP EOF(heredoc)使用说明</h2><p>PHP EOF(heredoc)是一种在命令行shell（如sh、csh、ksh、bash、PowerShell和zsh）和程序语言（像Perl、PHP、Python和Ruby）里定义一个字符串的方法。<br>使用概述：以 &lt;&lt;&lt;EOF 开始标记开始，以 EOF 结束标记结束，结束标识必须顶格独自占一行(即必须从行首开始，前后不能衔接任何空白和字符)。位于开始标记和结束标记之间的变量可以被正常解析，但是函数则不可以。</p>
+<hr>
+<h2 id="PHP数据类型"><a href="#PHP数据类型" class="headerlink" title="PHP数据类型"></a>PHP数据类型</h2><p>String（字符串）, Integer（整型）, Float（浮点型）, Boolean（布尔型）, Array（数组）, Object（对象）, NULL（空值）。<br>var_dump() 函数返回变量的数据类型和值；<br>NULL值表示变量没有值。NULL是数据类型为 NULL的值，指明一个变量是否为空值，可用于数据空值和NULL值的区别，也可以通过设置变量值为 NULL 来清空变量数据。</p>
+<hr>
+<h2 id="PHP类型比较"><a href="#PHP类型比较" class="headerlink" title="PHP类型比较"></a>PHP类型比较</h2><p>松散比较：使用两个等号 == 比较，只比较值，不比较类型。<br>严格比较：用三个等号 === 比较，除了比较值，也比较类型。</p>
+<hr>
+<h2 id="PHP常量"><a href="#PHP常量" class="headerlink" title="PHP常量"></a>PHP常量</h2><p>常量是一个简单值的标识符，该值在脚本中不能改变，在整个脚本中都可以使用。<br>设置常量，使用 define() 函数。<br>bool define ( string $name , mixed $value [, bool $case_insensitive = false ] )<br>name：必选参数，常量名称，即标志符。value：必选参数，常量的值。case_insensitive ：可选参数，如果设置为 TRUE，该常量则大小写不敏感。默认是大小写敏感的。</p>
+<hr>
+<h2 id="PHP运算符"><a href="#PHP运算符" class="headerlink" title="PHP运算符"></a>PHP运算符</h2><p>算术运算符:+、-、<em>、/、%、.（连接两个字符串）。<br>赋值运算符：=、+=、</em>=、-=、/=、%=、.=。<br>递增/递减运算符：++x、–x、x++、x–。<br>比较运算符：==（松散）、===（严格）、&lt;&gt;（不等于）、!=（松散不等于）、!==（严格不等于）、&gt;、&lt;、&gt;=、&lt;=。<br>逻辑运算符：and、or、xor（有且仅有一个为真）、&amp;&amp;、||、!。</p>
+<hr>
+<h2 id="PHH-if…else和switch语句"><a href="#PHH-if…else和switch语句" class="headerlink" title="PHH if…else和switch语句"></a>PHH if…else和switch语句</h2><p>if（条件）{条件成立时执行代码}<br>if（条件）{条件成立时执行代码}else{条件不成立时执行代码}<br>if（条件）{条件成立时执行代码}elseif{条件成立时执行代码}else{所有条件不成立时执行代码}<br>switch (n)<br>{<br>case label1:<br>　　如果 n=label1，此处代码将执行; break;<br>case label2:<br>　　如果 n=label2，此处代码将执行; break;<br>default:<br>　　如果 n 既不等于 label1 也不等于 label2，此处代码将执行;<br>}</p>
+<hr>
+<h2 id="PHP数组"><a href="#PHP数组" class="headerlink" title="PHP数组"></a>PHP数组</h2><p>数组是一个能在单个变量中存储多个值的特殊变量。<br>在 PHP 中，array() 函数用于创建数组：数值数组 - 带有数字 ID 键的数组；关联数组 - 带有指定的键的数组，每个键关联一个值；多维数组 - 包含一个或多个数组的数组</p>
+<hr>
+<h2 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h2><p>数组排序函数：<br>sort() - 对数组进行升序排列；rsort() - 对数组进行降序排列；asort() - 根据关联数组的值，对数组进行升序排列；ksort() - 根据关联数组的键，对数组进行升序排列；arsort() - 根据关联数组的值，对数组进行降序排列；krsort() - 根据关联数组的键，对数组进行降序排列</p>
+<hr>
+<h2 id="PHP超级全局变量"><a href="#PHP超级全局变量" class="headerlink" title="PHP超级全局变量"></a>PHP超级全局变量</h2>
       
     </div>
 
