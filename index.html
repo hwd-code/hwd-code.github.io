@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-02 19:28:58" itemprop="dateModified" datetime="2020-11-02T19:28:58+08:00">2020-11-02</time>
+                <time title="修改时间：2020-11-02 21:18:19" itemprop="dateModified" datetime="2020-11-02T21:18:19+08:00">2020-11-02</time>
               </span>
 
           
@@ -247,16 +247,62 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="PHP简介"><a href="#PHP简介" class="headerlink" title="PHP简介"></a>PHP简介</h1><p>PHP（全称PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。<br>PHP 脚本在服务器上执行。</p>
-<h1 id="PHP语法"><a href="#PHP语法" class="headerlink" title="PHP语法"></a>PHP语法</h1><p>PHP 脚本可以放在文档中的任何位置；以 <?php 开始，以 ?> 结束；默认文件扩展名是 “.php”。</p>
-<h1 id="PHP变量"><a href="#PHP变量" class="headerlink" title="PHP变量"></a>PHP变量</h1><h2 id="PHP-变量规则："><a href="#PHP-变量规则：" class="headerlink" title="PHP 变量规则："></a>PHP 变量规则：</h2><ul>
-<li>变量以 $ 符号开始，后面跟着变量的名称</li>
-<li>变量名必须以字母或者下划线字符开始</li>
-<li>变量名只能包含字母数字字符以及下划线（A-z、0-9 和 _ ）</li>
-<li>变量名不能包含空格</li>
-<li>变量名是区分大小写的（$y 和 $Y 是两个不同的变量）</li>
+          <h2 id="PHP简介"><a href="#PHP简介" class="headerlink" title="PHP简介"></a>PHP简介</h2><p>PHP（全称PHP：Hypertext Preprocessor，即”PHP：超文本预处理器”）是一种通用开源脚本语言。<br>PHP 脚本在服务器上执行。</p>
+<h2 id="PHP语法"><a href="#PHP语法" class="headerlink" title="PHP语法"></a>PHP语法</h2><p>PHP 脚本可以放在文档中的任何位置；以 <?php 开始，以 ?> 结束；默认文件扩展名是 “.php”。</p>
+<h2 id="PHP变量"><a href="#PHP变量" class="headerlink" title="PHP变量"></a>PHP变量</h2><h4 id="PHP-变量规则："><a href="#PHP-变量规则：" class="headerlink" title="PHP 变量规则："></a>PHP 变量规则：</h4><ul>
+<li><p>变量以 $ 符号开始，后面跟着变量的名称</p>
+</li>
+<li><p>变量名必须以字母或者下划线字符开始</p>
+</li>
+<li><p>变量名只能包含字母数字字符以及下划线（A-z、0-9 和 _ ）</p>
+</li>
+<li><p>变量名不能包含空格</p>
+</li>
+<li><p>变量名是区分大小写的（$y 和 $Y 是两个不同的变量）</p>
+</li>
 </ul>
+<p><strong>PHP 语句和 PHP 变量都是区分大小写的。</strong></p>
+<h4 id="PHP变量作用域"><a href="#PHP变量作用域" class="headerlink" title="PHP变量作用域"></a>PHP变量作用域</h4><ul>
+<li><p>global 用于函数内访问全局变量。</p>
+</li>
+<li><p>static 当函数完成时，使它的所有变量都<strong>不会被删除</strong>。</p>
+</li>
+</ul>
+<h2 id="echo和print语句"><a href="#echo和print语句" class="headerlink" title="echo和print语句"></a>echo和print语句</h2><h4 id="echo和print的区别："><a href="#echo和print的区别：" class="headerlink" title="echo和print的区别："></a>echo和print的区别：</h4><ul>
+<li>echo 可以输出一个和多个字符串。</li>
+<li>print 只允许输出一个字符串，返回值总为1。</li>
+</ul>
+<h2 id="EOF（heredoc）使用说明"><a href="#EOF（heredoc）使用说明" class="headerlink" title="EOF（heredoc）使用说明"></a>EOF（heredoc）使用说明</h2><h4 id="使用概述："><a href="#使用概述：" class="headerlink" title="使用概述："></a>使用概述：</h4><ul>
+<li>必须后接分号，否则编译通不过。</li>
+<li><strong>EOF</strong> 可以用任意其它字符代替，只需保证结束标识与开始标识一致。</li>
+<li><strong>结束标识必须顶格独自占一行(即必须从行首开始，前后不能衔接任何空白和字符)。</strong></li>
+<li>开始标识可以不带引号或带单双引号，不带引号与带双引号效果一致，解释内嵌的变量和转义符号，带单引号则不解释内嵌的变量和转义符号。</li>
+<li>当内容需要内嵌引号（单引号或双引号）时，不需要加转义符，本身对单双引号转义，此处相当与q和qq的用法。</li>
+</ul>
+<p><strong>位于开始标记和结束标记之间的变量可以被正常解析，但是函数则不可以。在 heredoc 中，变量不需要用连接符 .或，来拼接。</strong></p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>var_dump()函数返回变量的数据类型和值。</p>
+<ul>
+<li>字符串——一串字符序列，用单双引号包裹。</li>
+<li>整数——没有小数的数字，默认十进制，十六进制（0x为前缀），八进制（前缀为0）。</li>
+<li>浮点型——带小数部分的数字或是指数形式。</li>
+<li>布尔型——只有TRUE和FALSE两个值。</li>
+<li>数组——一个变量中存储多个值。</li>
+<li>对象——使用class关键字声明类对象，定义数据类型，再实例化的类中使用数据类型。</li>
+<li>NULL值——表示变量没有值，NULL为NULL的值。（NULL和空值是不同的）</li>
+</ul>
+<h2 id="类型比较"><a href="#类型比较" class="headerlink" title="类型比较"></a>类型比较</h2><ul>
+<li>松散比较：使用两个等号==比较，只比较值，不比较类型。</li>
+<li>严格比较：用三个等号 <strong>===</strong> 比较，除了比较值，也比较类型。</li>
+</ul>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>常量是一个简单值的标识符。该值在脚本中不能改变。</p>
+<p><strong>常量在整个脚本中都可以使用。</strong></p>
+<p>使用 define() 函数设置常量。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> define ( <span class="keyword">string</span> $name , mixed $value [, <span class="keyword">bool</span> $case_insensitive = <span class="literal">false</span> ] )</span><br></pre></td></tr></table></figure>
 
+
+
+<p>name和value为必选参数，case_insensitive为可选参数，默认大小敏感，即设为false，反之，设为true是，大小写不敏感。</p>
+<h2 id="字符串变量"><a href="#字符串变量" class="headerlink" title="字符串变量"></a>字符串变量</h2>
       
     </div>
 
