@@ -145,6 +145,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/07/%E4%BB%80%E4%B9%88%E6%98%AF%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丿小灬伟丨">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/07/%E4%BB%80%E4%B9%88%E6%98%AF%E6%B3%A8%E5%85%A5/" class="post-title-link" itemprop="url">什么是注入</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-07 23:14:07" itemprop="dateCreated datePublished" datetime="2020-11-07T23:14:07+08:00">2020-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-08 01:13:00" itemprop="dateModified" datetime="2020-11-08T01:13:00+08:00">2020-11-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是SQL注入"><a href="#什么是SQL注入" class="headerlink" title="什么是SQL注入?"></a>什么是SQL注入?</h2><p>用户提交带有恶意的数据与SQL语句进行字符串方式的拼接，从而影响了SQL语句的语义，最终产生数据泄露的现象.</p>
+<p>例子：</p>
+<h4 id="初步注入–绕过验证，直接登录"><a href="#初步注入–绕过验证，直接登录" class="headerlink" title="初步注入–绕过验证，直接登录"></a>初步注入–绕过验证，直接登录</h4><p><img src="https://img-blog.csdn.net/20180321110526347?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTQ1OTA3NTc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<p>根据输入框的形式推出SQL的写法如下：</p>
+<p><strong>SELECT * From Table WHERE Name=’XX’ andPassword=’YY’ and Corp=’ZZ’</strong></p>
+<p><img src="https://img-blog.csdn.net/20180321110534421?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTQ1OTA3NTc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<p>*<em>SELECT * FromTable WHERE Name=’SQL inject’ and Password=” and Corp=” or 1=1–’*</em></p>
+<p>前一半单引号被闭合，后一半单引号被 “–”给注释掉，中间多了一个永远成立的条件“1=1”，这就造成任何字符都能成功登录的结果。</p>
+<h4 id="中级注入–借助异常获取信息"><a href="#中级注入–借助异常获取信息" class="headerlink" title="中级注入–借助异常获取信息"></a>中级注入–借助异常获取信息</h4><p><img src="https://img-blog.csdn.net/20180321110545134?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTQ1OTA3NTc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<p>SELECT * FromTable WHERE Name=’SQL inject’ and Password=” and Corp=” or 1=(SELECT@@VERSION)–’</p>
+<p>判断条件变成了 1=(SELECT@@VERSION),这个写法肯定会导致错误，但出错正是我们想要的。点击登录后，页面出现以下信息：</p>
+<p>Conversion failedwhen converting the nvarchar value ‘Microsoft SQL Server 2008 (SP3) -10.0.5500.0 (X64) Sep 21 2011 22:45:45 Copyright (c) 1988-2008 MicrosoftCorporation Developer Edition (64-bit) on Windows NT 6.1 <X64> (Build7601: Service Pack 1) ’ to data type int.</X64></p>
+<p>服务器的操作系统和SQL Server版本信息竟然通过错误显示出来。</p>
+<p>“t’ or 1=(SELECTtop 1 name FROM master..<strong>sysdatabases</strong>(系统库) where name not in (SELECT top 0 name FROMmaster..sysdatabases))–”</p>
+<p>Conversion failedwhen converting the nvarchar value ‘master’ to data type int.数据库名称“master”通过异常被显示出来！</p>
+<p>SELECT TOP 1 * FROM的含义：<br>　　1、select为命令动词，含义为执行数据查询操作；<br>　　2、top 1子句含义为查询结果只显示首条记录；<br>　　3、*子句表示查询结果包括数据源中的所有字段；<br>　　4、from子句为指定数据源。</p>
+<p>select top n from——查询结果只显示首n条记录；</p>
+<p>“b’ or 1=(SELECTtop 1 name FROM master..sysobjects where xtype=’U’ and name not in (SELECT top1 name FROM master..sysobjects where xtype=’U’))–”</p>
+<p>Conversion failedwhen converting the nvarchar value ‘spt_fallback_db’ to data type int.</p>
+<p>master数据库中的第一张表名：“spt_fallback_db”。</p>
+<h4 id="最终目的–获取数据库中的数据"><a href="#最终目的–获取数据库中的数据" class="headerlink" title="最终目的–获取数据库中的数据"></a>最终目的–获取数据库中的数据</h4><p>通过SQL注入能获取全部的数据库，表，及其字段。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/18/MySql%E7%9A%84%E8%AF%AD%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -176,7 +261,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-04 14:37:13" itemprop="dateModified" datetime="2020-11-04T14:37:13+08:00">2020-11-04</time>
+                <time title="修改时间：2020-11-05 01:08:34" itemprop="dateModified" datetime="2020-11-05T01:08:34+08:00">2020-11-05</time>
               </span>
 
           
@@ -691,7 +776,82 @@
 <li>复制以下命令显示的SQL语句，修改数据表名，并执行SQL语句，通过以上命令 将完全的复制数据表结构。</li>
 <li>如果你想复制表的内容，你就可以使用 <strong>INSERT INTO … SELECT</strong> 语句来实现。</li>
 </ul>
+<h2 id="MySQL-元数据"><a href="#MySQL-元数据" class="headerlink" title="MySQL 元数据"></a>MySQL 元数据</h2><p><strong>获取服务器元数据</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SELECT VERSION( )</td>
+<td align="left">服务器版本信息</td>
+</tr>
+<tr>
+<td align="left">SELECT DATABASE( )</td>
+<td align="left">当前数据库名 (或者返回空)</td>
+</tr>
+<tr>
+<td align="left">SELECT USER( )</td>
+<td align="left">当前用户名</td>
+</tr>
+<tr>
+<td align="left">SHOW STATUS</td>
+<td align="left">服务器状态</td>
+</tr>
+<tr>
+<td align="left">SHOW VARIABLES</td>
+<td align="left">服务器配置变量</td>
+</tr>
+</tbody></table>
+<h2 id="MySQL-序列使用"><a href="#MySQL-序列使用" class="headerlink" title="MySQL 序列使用"></a>MySQL 序列使用</h2><p><strong>使用 AUTO_INCREMENT</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE insect</span><br><span class="line">    -&gt; (</span><br><span class="line">    -&gt; id INT UNSIGNED NOT NULL AUTO_INCREMENT,</span><br><span class="line">    -&gt; PRIMARY KEY (id),</span><br><span class="line">    -&gt; name VARCHAR(30) NOT NULL, # type of insect</span><br><span class="line">    -&gt; date DATE NOT NULL, # date collected</span><br><span class="line">    -&gt; origin VARCHAR(30) NOT NULL # where collected</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
+<p><strong>重置序列</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE insect DROP id;</span><br><span class="line">mysql&gt; ALTER TABLE insect</span><br><span class="line">    -&gt; ADD id INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,</span><br><span class="line">    -&gt; ADD PRIMARY KEY (id);</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置序列的开始值</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE insect</span><br><span class="line">    -&gt; (</span><br><span class="line">    -&gt; id INT UNSIGNED NOT NULL AUTO_INCREMENT,</span><br><span class="line">    -&gt; PRIMARY KEY (id),</span><br><span class="line">    -&gt; name VARCHAR(30) NOT NULL, </span><br><span class="line">    -&gt; date DATE NOT NULL,</span><br><span class="line">    -&gt; origin VARCHAR(30) NOT NULL</span><br><span class="line">)engine&#x3D;innodb auto_increment&#x3D;100 charset&#x3D;utf8;</span><br></pre></td></tr></table></figure>
+
+<p>auto_increment=100，即开始值为100，默认开始值是1。</p>
+<h2 id="MySQL-处理重复数据"><a href="#MySQL-处理重复数据" class="headerlink" title="MySQL 处理重复数据"></a>MySQL 处理重复数据</h2><p><strong>防止表中出现重复数据</strong></p>
+<p>设置指定的字段为 <strong>PRIMARY KEY（主键）</strong> 或者 <strong>UNIQUE（唯一）</strong> 索引来保证数据的唯一性。</p>
+<p><strong>统计重复数据</strong></p>
+<p>例：</p>
+<p>统计表中 first_name 和 last_name的重复记录数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT COUNT(*) as repetitions, last_name, first_name</span><br><span class="line">    -&gt; FROM person_tbl</span><br><span class="line">    -&gt; GROUP BY last_name, first_name</span><br><span class="line">    -&gt; HAVING repetitions &gt; 1;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>确定哪一列包含的值可能会重复。</li>
+<li>在列选择列表使用COUNT(*)列出的那些列。</li>
+<li>在GROUP BY子句中列出的列。</li>
+<li>HAVING子句设置重复数大于1。</li>
+</ul>
+<p><strong>过滤重复数据</strong></p>
+<p>使用 DISTINCT 关键字来过滤重复数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT DISTINCT last_name, first_name</span><br><span class="line">    -&gt; FROM person_tbl;</span><br></pre></td></tr></table></figure>
+
+<p><strong>删除重复数据</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE tmp SELECT last_name, first_name, sex FROM person_tbl  GROUP BY (last_name, first_name, sex);</span><br><span class="line">mysql&gt; DROP TABLE person_tbl;</span><br><span class="line">mysql&gt; ALTER TABLE tmp RENAME TO person_tbl;</span><br></pre></td></tr></table></figure>
+
+<h2 id="MySQL-及-SQL-注入"><a href="#MySQL-及-SQL-注入" class="headerlink" title="MySQL 及 SQL 注入"></a>MySQL 及 SQL 注入</h2><h4 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h4><p>所谓SQL注入，就是通过把SQL命令插入到Web表单递交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+<p>MySQL 导出/导入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM runoob_tbl </span><br><span class="line">    -&gt; INTO OUTFILE &#39;&#x2F;tmp&#x2F;runoob.txt&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>将数据表 runoob_tbl 数据导出到 /tmp/runoob.txt 文件中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mysqldump -u root -p --no-create-info \</span><br><span class="line">            --tab&#x3D;&#x2F;tmp RUNOOB runoob_tbl</span><br><span class="line">$ mysqldump -u root -p RUNOOB runoob_tbl &gt; dump.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>mysqldump</strong> 是 mysql 用于转存储数据库的实用程序。它主要产生一个 SQL 脚本，其中包含从头重新创建数据库所必需的命令 CREATE TABLE INSERT 等。</p>
+<p>使用 <strong>mysqldump</strong> 导出数据需要使用 <strong>–tab</strong> 选项来指定导出文件指定的目录，该目标必须是可写的。</p>
+<h4 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u用户名    -p密码    &lt;  要导入的数据库数据(runoob.sql)</span><br></pre></td></tr></table></figure>
+
+<p><strong>source 命令导入</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database abc;      # 创建数据库</span><br><span class="line">mysql&gt; use abc;                  # 使用已创建的数据库 </span><br><span class="line">mysql&gt; set names utf8;           # 设置编码</span><br><span class="line">mysql&gt; source &#x2F;home&#x2F;abc&#x2F;abc.sql  # 导入备份数据库</span><br></pre></td></tr></table></figure>
+
+<p>source 命令导入数据库需要先登录到数库终端。</p>
+<p><strong>使用 LOAD DATA 导入数据</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; LOAD DATA LOCAL INFILE &#39;dump.txt&#39; INTO TABLE mytbl;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1079,7 +1239,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
